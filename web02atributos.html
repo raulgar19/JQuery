@@ -19,8 +19,6 @@
     <img src="images/imagen1.jpg" alt="">
     <img src="images/imagen1.jpg" alt="">
 
-    <input type="text">
-
     <script src="js/jquery-3.7.1.js"></script>
     <script>
     $(document).ready(function(){
@@ -34,15 +32,6 @@
             var actual = $(this).attr("src");
             console.log("Imagen out: " + actual);
             $(this).attr("src", "images/imagen1.jpg");
-        });
-
-        $("input").focus(function() {
-            console.log("Has hecho focus en el input");
-            $(this).css("border-color", "red");
-        });
-        $("input").blur(function() {
-            console.log("Has salido del input");
-            $(this).css("border-color", "black");
         });
     });
     </script>
