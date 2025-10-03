@@ -20,22 +20,22 @@
                 var num = Math.floor(Math.random() * 100) + 1;
 
                 boton.text("Número " + num);
-                
+
                 $("#contenedor").append(boton);
             }
 
             $("button").click(function() {
                 var texto = $(this).text();
                 var numero = parseInt(texto.split(" ")[1]);
-                var resNum = parseInt($("#resultado").text());
+                var res = parseInt($("#resultado").text());
 
-                if (isNaN(resNum)) {
-                    resNum = 0;
+                if (isNaN(res)) {
+                    res = 0;
                 } 
                 
-                var nuevoRes = resNum + numero;
+                res += numero;
 
-                $("#resultado").text(nuevoRes);
+                $("#resultado").text(res);
             });
         });
     </script>
