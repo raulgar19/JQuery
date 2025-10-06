@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Servicio XML Clientes V1</h1>
+    <label>Seleccione un cliente</label>
+    <select id="selectcliente"></select>
+    <div id="contenedor"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+      $(document).ready(function () {
+        let url = "https://apiclientesxml.azurewebsites.net/";
+        let request = "api/clientes/getclientesxml";
+
+        $.get(url + request, function (data) {
+          console.log("Leyendo...");
+
+          $(data)
+            .find("CLIENTE")
+            .each(function () {
+              var id = $(this).attr("IDCLIENTE");
+              var nombre = $(this).find("NOMBRE").text();
+              $("#selectcliente").append($("<option>").val(id).text(nombre));
+            });
+        });
+
+        $("#selectcliente").change(function () {
+          $.get(url + request, function (data) {
+            console.log("Leyendo detalles...");
+            $("#contenedor").html("");
+
+            $(data)
+              .find("CLIENTE")
+              .each(function () {
+                if ($(this).attr("IDCLIENTE") == $("#selectcliente").val()) {
+                  var nombre = $(this).find("NOMBRE").text();
+                  var direccion = $(this).find("DIRECCION").text();
+                  var email = $(this).find("EMAIL").text();
+                  var codigopostal = $(this).find("CODIGOPOSTAL").text();
+                  var paginaweb = $(this).find("PAGINAWEB").text();
+                  var imagencliente = $(this).find("IMAGENCLIENTE").text();
+
+                  var nombrecliente = $("<h2>").text(nombre);
+                  var direccioncliente = $("<p>").text(direccion);
+                  var emailcliente = $("<p>").text(email);
+                  var codigopostalcliente = $("<p>").text(codigopostal);
+                  var paginacliente = $("<a>")
+                    .attr("href", paginaweb)
+                    .text(paginaweb);
+                  var imagen = $("<img>")
+                    .attr("src", imagencliente)
+                    .attr("width", "200")
+                    .attr("height", "150");
+                  $("#contenedor").append(nombrecliente);
+                  $("#contenedor").append(direccioncliente);
+                  $("#contenedor").append(emailcliente);
+                  $("#contenedor").append(codigopostalcliente);
+                  $("#contenedor").append(paginacliente);
+                  $("#contenedor").append("<br/>");
+                  $("#contenedor").append(imagen);
+                }
+              });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

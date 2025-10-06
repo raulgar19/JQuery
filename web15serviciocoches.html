@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Servicio XML Coches</h1>
+    <label>Seleccione un coche</label>
+    <select id="selectcoche"></select>
+    <div id="contenedor"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+      $(document).ready(function () {
+        let url = "https://apiclientesxml.azurewebsites.net/";
+        let request = "api/clientes/getcochesxml";
+
+        $.get(url + request, function (data) {
+          console.log("Leyendo...");
+          $("#selectcoche").html("");
+
+          $(data)
+            .find("coche")
+            .each(function () {
+              var id = $(this).attr("idcoche");
+              var marca = $(this).find("marca").text();
+              var modelo = $(this).find("modelo").text();
+              $("#selectcoche").append(
+                $("<option>")
+                  .val(id)
+                  .text(marca + " " + modelo)
+              );
+            });
+
+          $("#selectcoche").change(function () {
+            var id = $(this).val();
+            $.get(url + request, function (data) {
+              console.log("Leyendo detalle...");
+              var filtro = "coche[idcoche=" + id + "]";
+
+              $(data)
+                .find(filtro)
+                .each(function () {
+                  var marca = $(this).find("marca").text();
+                  var modelo = $(this).find("modelo").text();
+                  var imagen = $(this).find("imagen").text();
+
+                  $("#contenedor").html(
+                    "<h2>" +
+                      marca +
+                      " " +
+                      modelo +
+                      "</h2><img src='" +
+                      imagen +
+                      "' width='300'/>"
+                  );
+                });
+            });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

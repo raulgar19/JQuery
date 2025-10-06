@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Servicio XML Clientes V2</h1>
+    <div id="botones"></div>
+    <hr />
+    <div id="contenedor"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+      $(document).ready(function () {
+        let url = "https://apiclientesxml.azurewebsites.net/";
+        let request = "api/Clientes";
+
+        $.get(url + request, function (data) {
+          console.log("Cagando datos...");
+
+          $(data)
+            .find("Cliente")
+            .each(function () {
+              var id = $(this).find("IdCliente").text();
+              var nombre = $(this).find("Nombre").text();
+
+              var button = $("<button>").text(nombre).attr("data-id", id);
+              $("#botones").append(button);
+
+              $(button).click(function () {
+                var id = $(this).attr("data-id");
+                let requestDetalles = "api/Clientes/" + id;
+
+                $.get(url + requestDetalles, function (data) {
+                  console.log("Leyendo detalles...");
+                  $("#contenedor").html("");
+
+                  var nombre = $(data).find("Nombre").text();
+                  var email = $(data).find("Email").text();
+                  var paginaweb = $(data).find("PaginaWeb").text();
+                  var imagen = $(data).find("Imagen").text();
+
+                  var nombrecliente = $("<h2>")
+                    .text(nombre)
+                    .css("color", "red");
+                  var emailcliente = $("<p>").text(email);
+                  var paginacliente = $("<a>")
+                    .attr("href", paginaweb)
+                    .text(paginaweb);
+                  var imagencliente = $("<img>")
+                    .attr("src", imagen)
+                    .attr("width", "200")
+                    .attr("height", "150");
+
+                  $("#contenedor").append(nombrecliente);
+                  $("#contenedor").append(emailcliente);
+                  $("#contenedor").append(paginacliente);
+                  $("#contenedor").append("<br>");
+                  $("#contenedor").append("<br>");
+                  $("#contenedor").append(imagencliente);
+                });
+              });
+            });
+        });
+      });
+    </script>
+  </body>
+</html>
