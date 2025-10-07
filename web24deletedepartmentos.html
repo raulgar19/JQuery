@@ -14,10 +14,6 @@
       let url = "https://apicruddepartamentospgs.azurewebsites.net/";
       $(document).ready(function () {
         loadDepartamentos();
-
-        $("button").click(function () {
-          console.log($(this).data("id"));
-        });
       });
 
       function loadDepartamentos() {
@@ -29,23 +25,45 @@
           dataType: "json",
           success: function (data) {
             console.log("Leyendo...");
+
             $.each(data, function (index, departamento) {
-              var li = $("li");
+              var li = $("<li>");
+              var button = $("<button>");
+
+              button.text("Eliminar departamento");
+              button.val(departamento.numero);
+
+              button.click(function () {
+                console.log("Eliminando departamento...");
+
+                var request =
+                  "webresources/departamentos/delete/" + $(this).val();
+
+                $.ajax({
+                  url: url + request,
+                  method: "DELETE",
+                  success: function () {
+                    $("#listadepartamentos").empty();
+                    console.log("Departamento eliminado correctamente");
+                    loadDepartamentos();
+                  },
+                });
+              });
+
               li.text(
                 "Número: " +
                   departamento.numero +
                   ", Nombre: " +
                   departamento.nombre +
                   ", Localidad: " +
-                  departamento.localidad
+                  departamento.localidad +
+                  " "
               );
 
-              html +=
-                "<button click='' data-id= " +
-                departamento.numero +
-                ">Eliminar</button>";
+              li.append(button);
+
+              $("#listadepartamentos").append(li);
             });
-            $("#listadepartamentos").html(html);
           },
         });
       }
