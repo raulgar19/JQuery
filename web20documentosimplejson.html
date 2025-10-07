@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Documento simple JSON</h1>
+    <button id="botonload">Cargar documento</button>
+    <ul id="tareas"></ul>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+      let url = "documents/tareas.json";
+
+      $(document).ready(function () {
+        $("#botonload").click(function () {
+          $.getJSON(url, function (data) {
+            console.log("Leyendo...");
+            var html = "";
+
+            $.each(data, function (key, value) {
+              html += "<li>Key: " + key + ", Value: " + value + "</li>";
+            });
+
+            $("#tareas").html(html);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
