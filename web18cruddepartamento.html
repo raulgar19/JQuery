@@ -7,6 +7,16 @@
   </head>
   <body>
     <h1>CRUD Departamentos XML</h1>
+    <label>Id Departamento</label>
+    <input type="text" id="cajaid" />
+    <label>Nombre</label>
+    <input type="text" id="cajanombre" />
+    <label>Localidad</label>
+    <input type="text" id="cajalocalidad" />
+    <button id="botoninsert">Insertar</button>
+    <button id="botonupdate">Modificar</button>
+    <button id="botondelete">Eliminar</button>
+    <hr />
     <table id="tabladepartamentos">
       <thead>
         <tr>
@@ -24,7 +34,71 @@
 
       $(document).ready(function () {
         loadDepartamentos();
+
+        $("#botoninsert").click(function () {
+          let id = $("#cajaid").val();
+          let nombre = $("#cajanombre").val();
+          let localidad = $("#cajalocalidad").val();
+
+          let dataXML = getDepartamentoXML(id, nombre, localidad);
+          let request = "api/departamentos";
+
+          $.ajax({
+            url: url + request,
+            type: "POST",
+            contentType: "application/xml",
+            data: dataXML,
+            success: function () {
+              console.log("Departamento insertado");
+              loadDepartamentos();
+            },
+          });
+        });
+
+        $("#botonupdate").click(function () {
+          let id = $("#cajaid").val();
+          let nombre = $("#cajanombre").val();
+          let localidad = $("#cajalocalidad").val();
+
+          let dataXML = getDepartamentoXML(id, nombre, localidad);
+          let request = "api/departamentos/";
+
+          $.ajax({
+            url: url + request,
+            type: "PUT",
+            contentType: "application/xml",
+            data: dataXML,
+            success: function () {
+              console.log("Departamento modificado");
+              loadDepartamentos();
+            },
+          });
+        });
+
+        $("#botondelete").click(function () {
+          let id = $("#cajaid").val();
+          let request = "api/departamentos/" + id;
+
+          $.ajax({
+            url: url + request,
+            type: "DELETE",
+            success: function () {
+              console.log("Departamento eliminado");
+              loadDepartamentos();
+            },
+          });
+        });
       });
+
+      function getDepartamentoXML(id, nombre, localidad) {
+        let dataXML = "<Departamento>";
+        dataXML += "<IdDepartamento>" + id + "</IdDepartamento>";
+        dataXML += "<Nombre>" + nombre + "</Nombre>";
+        dataXML += "<Localidad>" + localidad + "</Localidad>";
+        dataXML += "</Departamento>";
+
+        return dataXML;
+      }
 
       function loadDepartamentos() {
         var request = "api/departamentos";
