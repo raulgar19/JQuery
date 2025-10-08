@@ -51,28 +51,25 @@
               $("#listadepartamentos").append(li);
 
               a.click(function () {
-                var request = "api/empleados";
-
                 var idDepartamento = parseInt($(this).data("id"));
+                var request =
+                  "api/empleados/empleadosdepartamento/" + idDepartamento;
 
                 $.ajax({
                   url: empleadosURL + request,
                   method: "GET",
                   success: function (data) {
-                    console.log("Leyendo...");
                     $("#tablaempleados tbody").empty();
 
                     $.each(data, function (index, empleado) {
-                      if (empleado.departamento === idDepartamento) {
-                        var tr = $("<tr>");
+                      var tr = $("<tr>");
 
-                        tr.append($("<td>", { text: empleado.apellido }));
-                        tr.append($("<td>", { text: empleado.oficio }));
-                        tr.append($("<td>", { text: empleado.salario }));
-                        tr.append($("<td>", { text: empleado.departamento }));
+                      tr.append($("<td>", { text: empleado.apellido }));
+                      tr.append($("<td>", { text: empleado.oficio }));
+                      tr.append($("<td>", { text: empleado.salario }));
+                      tr.append($("<td>", { text: empleado.departamento }));
 
-                        $("#tablaempleados tbody").append(tr);
-                      }
+                      $("#tablaempleados tbody").append(tr);
                     });
                   },
                 });
