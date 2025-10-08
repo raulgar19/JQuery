@@ -47,27 +47,23 @@
             success: function (data) {
               var incremento = parseInt($("#cajaincremento").val());
 
-              console.log("Obteniendo empleados con el oficio seleccionado...");
+              var request =
+                "api/empleados/incrementarsalariooficios/" +
+                empleado.oficio +
+                "/" +
+                incremento;
 
-              $.each(data, function (index, empleado) {
-                var request =
-                  "api/empleados/incrementarsalariooficios/" +
-                  empleado.oficio +
-                  "/" +
-                  incremento;
-
-                $.ajax({
-                  url: url + request,
-                  method: "PUT",
-                  success: function () {
-                    console.log(
-                      "Salario de empleados con oficio " +
-                        empleado.oficio +
-                        " incrementado"
-                    );
-                    loadEmpleados();
-                  },
-                });
+              $.ajax({
+                url: url + request,
+                method: "PUT",
+                success: function () {
+                  console.log(
+                    "Salario de empleados con oficio " +
+                      empleado.oficio +
+                      " incrementado"
+                  );
+                  loadEmpleados();
+                },
               });
             },
           });
