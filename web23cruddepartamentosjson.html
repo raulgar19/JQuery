@@ -9,13 +9,13 @@
     <h1>Crud departamentos JSON</h1>
     <label>Id Departamento</label>
     <input type="text" id="cajaid" />
-    <br>
+    <br />
     <label>Nombre</label>
     <input type="text" id="cajanombre" />
-    <br>
+    <br />
     <label>Localidad</label>
     <input type="text" id="cajalocalidad" />
-    <br>
+    <br />
     <button id="botoninsert">Insertar</button>
     <button id="botonupdate">Modificar</button>
     <button id="botondelete">Eliminar</button>
@@ -29,9 +29,11 @@
         </tr>
       </thead>
       <tbody></tbody>
+    </table>
+
     <script src="js/jquery-3.7.1.js"></script>
     <script>
-        let url = "https://apicruddepartamentoscore.azurewebsites.net/";
+      let url = "https://apicruddepartamentoscore.azurewebsites.net/";
 
       $(document).ready(function () {
         loadDepartamentos();
@@ -108,7 +110,7 @@
 
       function loadDepartamentos() {
         var request = "api/departamentos";
-        
+
         $.getJSON(url + request, function (data) {
           console.log("Leyendo...");
           var html = "";
