@@ -257,35 +257,79 @@
       let url = "https://apicrudhospital.azurewebsites.net/";
 
       $(document).ready(function () {
+        //CODIGO DE ELIMINAR DEBE ESTAR ANTES DE DIBUJAR...
+
+        var params = new window.URLSearchParams(window.location.search);
+
+        var idDelete = params.get("iddelete");
+
+        console.log("Delete: " + idDelete); //TRISTE IF PARA VER SI TENEMOS DATOS
+
+        if (idDelete != null) {
+          var requestDelete = "webresources/hospitales/delete/" + idDelete;
+
+          $.ajax({
+            url: url + requestDelete,
+
+            type: "DELETE",
+
+            success: function () {
+              console.log("Eliminando hospital: " + idDelete);
+
+              loadHospitales();
+            },
+          });
+        } else {
+          loadHospitales();
+        }
+      });
+
+      function loadHospitales() {
         let request = "webresources/hospitales";
 
         $.ajax({
           url: url + request,
-          method: "GET",
+
+          type: "GET",
+
           success: function (data) {
-            console.log("Leyendo hospitales...");
+            console.log("Leyendo hospitales");
 
             var html = "";
 
             $.each(data, function (index, hospital) {
               html += "<tr>";
+
               html += "<td>" + hospital.nombre + "</td>";
+
               html += "<td>" + hospital.direccion + "</td>";
-              html += "<td>";
+
+              html += "<td>"; //web28detailshospital.html?idhospital=99
+
               html +=
                 "<a href='web28detailshospital.html?idhospital=" +
-                +hospital.idhospital +
+                hospital.idhospital +
                 "' class='btn btn-success'>Details</a>";
+
               html +=
-                "<a href='web28edithospital.html' class='btn btn-info'>Edit</a>";
+                "<a href='web28edithospital.html?idhospital=" +
+                hospital.idhospital +
+                "' class='btn btn-info'>Edit</a>";
+
+              html +=
+                "<a href='web28homehospitales.html?iddelete=" +
+                hospital.idhospital +
+                "' class='btn btn-danger'>Delete</a>";
+
               html += "</td>";
+
               html += "</tr>";
             });
 
             $("#tablahospitales tbody").html(html);
           },
         });
-      });
+      }
     </script>
   </body>
 </html>

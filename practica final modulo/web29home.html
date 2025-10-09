@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="auto">
+<html lang="en" class="h-100" data-bs-theme="auto">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,16 +9,21 @@
       content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
     />
     <meta name="generator" content="Astro v5.13.2" />
-    <title>Crud Hospitales</title>
+    <title>Práctica final módulo</title>
     <link
       rel="canonical"
-      href="https://getbootstrap.com/docs/5.3/examples/navbar-fixed/"
+      href="https://getbootstrap.com/docs/5.3/examples/cover/"
+    />
+    <link
+      href="
+        https://cdn.jsdelivr.net/npm/sweetalert2@11.25.0/dist/sweetalert2.min.css"
+      rel="stylesheet"
     />
     <script src="js/color-modes.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
 
     <meta name="theme-color" content="#712cf9" />
-    <link href="css/navbar-fixed.css" rel="stylesheet" />
+    <link href="css/cover.css" rel="stylesheet" />
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -93,7 +98,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="d-flex h-100 text-center text-bg-dark">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
         <path
@@ -189,139 +194,121 @@
         </li>
       </ul>
     </div>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Crud Hospitales</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarCollapse"
-          aria-controls="navbarCollapse"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav me-auto mb-2 mb-md-0">
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="web28homehospitales.html"
-                >Home</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="web28createhospital.html"
-                >New hospital</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <header class="mb-auto">
+        <div>
+          <h3 class="float-md-start mb-0">Doctores</h3>
+          <nav class="nav nav-masthead justify-content-center float-md-end">
+            <a
+              class="nav-link fw-bold py-1 px-0 active"
+              aria-current="page"
+              href="web29home.html"
+              >Home</a
+            >
+            <a
+              class="nav-link fw-bold py-1 px-0"
+              href="web29createhospital.html"
+              >Create Doctor</a
+            >
+          </nav>
         </div>
-      </div>
-    </nav>
-    <main class="container">
-      <div class="bg-body-tertiary p-5 rounded">
-        <h1>Edit Hospital</h1>
-
-        <input type="hidden" id="cajaid" class="form-control" />
-
-        <label>Nombre</label>
-        <input type="text" id="cajanombre" class="form-control" />
-        <br />
-        <label>Dirección</label>
-        <input type="text" id="cajadireccion" class="form-control" />
-        <br />
-        <label>Teléfono</label>
-        <input type="text" id="cajatelefono" class="form-control" />
-        <br />
-        <label>Camas</label>
-        <input type="text" id="cajacamas" class="form-control" />
-        <br />
-        <button id="botonmodificar" class="btn btn-info">Update</button>
-      </div>
-    </main>
-    <script src="js/bootstrap.bundle.min.js"></script>
+      </header>
+      <main class="px-3">
+        <h1>Lista de doctores</h1>
+        <table id="tabladoctores" class="table-dark table-bordered">
+          <thead>
+            <tr>
+              <th>Id Doctor</th>
+              <th>Id Hospital</th>
+              <th>Apellido</th>
+              <th>Especialidad</th>
+              <th>Salario</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </main>
+      <footer class="mt-auto text-white-50">
+        <p>Developed by Raúl</p>
+      </footer>
+    </div>
+    <script src="js/bootstrap.bundle.min.js" class="astro-vvvwv3sm"></script>
     <script src="js/jquery-3.7.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.25.0/dist/sweetalert2.all.min.js"></script>
     <script>
-      let url = "https://apicrudhospital.azurewebsites.net/";
+      let url = "https://apicruddoctores.azurewebsites.net/";
 
       $(document).ready(function () {
-        $("#botonmodificar").click(function () {
-          var id = parseInt($("#cajaid").val());
-          var nombre = $("#cajanombre").val();
-          var direccion = $("#cajadireccion").val();
-          var telefono = $("#cajatelefono").val();
-          var camas = parseInt($("#cajacamas").val());
+        loadDoctores();
+      });
 
-          var hospital = {
-            idhospital: id,
-            nombre: nombre,
-            direccion: direccion,
-            telefono: telefono,
-            camas: camas,
-          };
-
-          var hospitalJSON = JSON.stringify(hospital);
-          console.log(hospitalJSON);
-
-          // Usar el endpoint 'put' (según la API que indicaste)
-          var requestPut = "webresources/hospitales/put";
-
-          console.log("PUT ->", url + requestPut);
-          console.log("Payload ->", hospitalJSON);
-
-          $.ajax({
-            url: url + requestPut,
-            method: "PUT",
-            contentType: "application/json",
-            data: hospitalJSON,
-            success: function (response) {
-              console.log("Modificando...", response);
-              window.location.href =
-                "web28detailshospital.html?idhospital=" + id;
-            },
-            error: function (xhr, status, error) {
-              console.error("PUT error:", status, error);
-              console.error("Response:", xhr.status, xhr.responseText);
-              alert("Error al modificar. Ver consola para más detalles.");
-            },
-          });
-        });
-
-        let params = new window.URLSearchParams(window.location.search);
-        let idhospital = params.get("idhospital");
-        let requestFind = "webresources/hospitales/" + idhospital;
+      function loadDoctores() {
+        let requestFind = "api/Doctores";
 
         $.ajax({
           url: url + requestFind,
           method: "GET",
           success: function (data) {
-            console.log("Leyendo datos...");
-            $("#cajaid").val(data.idhospital);
-            $("#cajanombre").val(data.nombre);
-            $("#cajadireccion").val(data.direccion);
-            $("#cajatelefono").val(data.telefono);
-            $("#cajacamas").val(data.camas);
+            $.each(data, function (index, doctor) {
+              var idDoctor = doctor.idDoctor;
+              var idHospital = doctor.idHospital;
+              var apellido = doctor.apellido;
+              var especialidad = doctor.especialidad;
+              var salario = doctor.salario;
+
+              var tr = $("<tr>");
+
+              var tdIdDoctor = $("<td>").text(idDoctor);
+              var tdIdHospital = $("<td>").text(idHospital);
+              var tdApellido = $("<td>").text(apellido);
+              var tdEspecialidad = $("<td>").text(especialidad);
+              var tdSalario = $("<td>").text(salario);
+
+              var boton = $("<buttton>")
+                .text("Eliminar")
+                .addClass("btn btn-danger")
+                .click(function () {
+                  var requestDelete = "api/doctores/" + idDoctor;
+
+                  Swal.fire({
+                    title: "Alerta!",
+                    text: "Seguro que quieres borar el doctor",
+                    icon: "warning",
+                    showDenyButton: true,
+                    denyButtonText: "Cancelar",
+                    confirmButtonText: "Aceptar",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      $.ajax({
+                        url: url + requestDelete,
+                        method: "DELETE",
+                        success: function () {
+                          console.log("Eliminando doctor...");
+                          loadDoctores();
+                        },
+                      });
+                      Swal.fire("Eliminado correctamente", "", "success");
+                    } else if (result.isDenied) {
+                      Swal.fire("No se ha eliminado", "", "info");
+                    }
+                  });
+                });
+
+              var acciones = $("<td>").append(boton);
+
+              tr.append(tdIdDoctor);
+              tr.append(tdIdHospital);
+              tr.append(tdApellido);
+              tr.append(tdEspecialidad);
+              tr.append(tdSalario);
+              tr.append(acciones);
+
+              $("#tabladoctores tbody").append(tr);
+            });
           },
         });
-      });
+      }
     </script>
   </body>
 </html>
