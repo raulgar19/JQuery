@@ -207,7 +207,8 @@
             >
             <a
               class="nav-link fw-bold py-1 px-0"
-              href="web29createhospital.html"
+              aria-current="page"
+              href="web29create.html"
               >Create Doctor</a
             >
           </nav>
@@ -265,6 +266,35 @@
               var tdEspecialidad = $("<td>").text(especialidad);
               var tdSalario = $("<td>").text(salario);
 
+              var botonEliminar = $("<buttton>")
+                .text("Eliminar")
+                .addClass("btn btn-danger")
+                .click(function () {
+                  var requestDelete = "api/doctores/" + idDoctor;
+
+                  Swal.fire({
+                    title: "Alerta!",
+                    text: "Seguro que quieres borar el doctor",
+                    icon: "warning",
+                    showDenyButton: true,
+                    denyButtonText: "Cancelar",
+                    confirmButtonText: "Aceptar",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      $.ajax({
+                        url: url + requestDelete,
+                        method: "DELETE",
+                        success: function () {
+                          console.log("Eliminando doctor...");
+                          loadDoctores();
+                        },
+                      });
+                      Swal.fire("Eliminado correctamente", "", "success");
+                    } else if (result.isDenied) {
+                      Swal.fire("No se ha eliminado", "", "info");
+                    }
+                  });
+                });
               var boton = $("<buttton>")
                 .text("Eliminar")
                 .addClass("btn btn-danger")
