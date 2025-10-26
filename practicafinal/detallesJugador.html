@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-light"
+      data-bs-theme="light"
+    >
+      <div class="container">
+        <img
+          src="images/champions.png"
+          class="w-25 h-25 img-fluid"
+          alt="champions"
+        />
+        <a class="navbar-brand" href="home.html"> Champions </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="home.html">
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="apuestas.html"> Apuestas </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="/"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Equipos
+              </a>
+              <ul class="dropdown-menu" id="equiposDropdown"></ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" id="content"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+      let url = "https://apiapuestas.azurewebsites.net/";
+
+      $(document).ready(function () {
+        loadEquipos();
+        loadDetallesJugador();
+      });
+
+      function loadDetallesJugador() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const idJugador = urlParams.get("idJugador");
+        const idEquipo = urlParams.get("idEquipo");
+
+        var request = "api/jugadores/" + idJugador;
+
+        $.ajax({
+          url: url + request,
+          method: "GET",
+          success: function (jugador) {
+            console.log("Obteniendo detalles del jugador...");
+
+            // Crear elementos con jQuery en lugar de usar plantilla literal
+            $("#content").empty();
+
+            var title = $("<h2>").text(jugador.nombre || "Sin nombre");
+
+            var img = $("<img>")
+              .attr("src", jugador.imagen)
+              .attr("alt", jugador.nombre)
+              .addClass("img-fluid")
+              .css({ maxWidth: "300px", height: "auto" });
+
+            var pos = $("<p>").html(
+              "<strong>Posición:</strong> " + jugador.posicion
+            );
+
+            var fechaNacimiento = $("<p>").html(
+              "<strong>Fecha Nacimiento:</strong> " + jugador.fechaNacimiento
+            );
+
+            var pais = $("<p>").html("<strong>País:</strong> " + jugador.pais);
+
+            var btnBack = $("<button>")
+              .addClass("btn btn-success mt-2")
+              .attr("type", "button")
+              .text("Jugadores")
+              .on("click", function () {
+                window.location.href = "jugadoresEquipo.html?id=" + idEquipo;
+              });
+
+            $("#content").append(title, img, pos, fechaNacimiento, btnBack);
+          },
+        });
+      }
+
+      function loadEquipos() {
+        var request = "api/equipos";
+
+        $.ajax({
+          url: url + request,
+          method: "GET",
+          success: function (data) {
+            console.log("Obteniendo equipos...");
+
+            data.forEach((equipo) => {
+              var li = $("<li>");
+              var a = $("<a>")
+                .addClass("dropdown-item")
+                .attr("href", "detallesEquipo.html?id=" + equipo.idEquipo)
+                .text(equipo.nombre);
+
+              li.append(a);
+              $("#equiposDropdown").append(li);
+            });
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
